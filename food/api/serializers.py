@@ -17,9 +17,9 @@ class UserSerializer(UserSerializer):
     is_subcribed=serializers.SerializerMethodField(read_only=True)
 
   
-  class Meta:
-        model = User
-        fields = [
+    class Meta:
+      model = User
+      fields = [
             'email',
             'id',
             'username',
