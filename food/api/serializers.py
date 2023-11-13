@@ -1,4 +1,4 @@
-from drf_extra_fields import Base64ImageFied
+from drf_extra_fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from djoser.serializers import UserSerializer
@@ -80,7 +80,7 @@ class RecipesReadSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.SerializerMethodField(read_only=True)
     is_in_shopping_cart = serializers.SerializerMethodField(read_only=True)
-    image = Base64ImageFied()
+    image = Base64ImageField()
 
     class Meta:
         model = Recipes
