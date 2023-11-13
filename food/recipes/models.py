@@ -45,7 +45,8 @@ class Recipes(models.Model):
         verbose_name='Автор',
     )
     name = models.CharField('Рецепт', max_length=200, blank=False,)
-    image = models.ImageField('Картинка', upload_to='recipe_images/', blank=False)
+    image = models.ImageField('Картинка', upload_to='recipe_images/',
+                              blank=False)
     text = models.TextField(verbose_name='Описание',
                             blank=False)
     ingredients = models.ManyToManyField(
@@ -60,8 +61,7 @@ class Recipes(models.Model):
                                                     blank=False, validators=[
                                                         MaxValueValidator(600),
                                                         MinValueValidator(1),
-                                                    ],
-                                                   )
+                                                    ],)
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now_add=True,
@@ -79,7 +79,7 @@ class RecipeIngredient(models.Model):
         Ingredient, on_delete=models.CASCADE, related_name='ingredients'
     )
     recipe = models.ForeignKey(
-        Recipes,on_delete=models.CASCADE, related_name='recipes'
+        Recipes, on_delete=models.CASCADE, related_name='recipes'
     )
     amount = models.PositiveIntegerField('Количество ингредиента')
 
@@ -131,7 +131,7 @@ class ShoppingCart(models.Model):
     class Meta:
         default_related_name = 'carts'
         verbose_name = 'Список покупок'
-        verbose_name_plural= 'Список покупок'
+        verbose_name_plural = 'Список покупок'
 
     def __str__(self):
         return f'{self.user} / {self.recipe}'
