@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.validators import(
+from django.core.validators import (
     MinValueValidator,
     MaxValueValidator
 )
@@ -10,11 +10,10 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    name = models.CharField('Ингредиент', max_length=100,
-        blank=False,)
+    name = models.CharField('Ингредиент', max_length=100, blank=False,)
     measurement_unit = models.CharField('Единица измерения',
-        max_length=30,
-        blank=False,)
+                                        max_length=30,
+                                        blank=False,)
 
     class Meta:
         ordering = ('name',)
@@ -47,7 +46,8 @@ class Recipes(models.Model):
     )
     name = models.CharField('Рецепт', max_length=200, blank=False,)
     image = models.ImageField('Картинка', upload_to='recipe_images/', blank=False)
-    text = models.TextField(verbose_name='Описание', blank=False)
+    text = models.TextField(verbose_name='Описание',
+                            blank=False)
     ingredients = models.ManyToManyField(
         Ingredient,
         related_name='rerecipes',
@@ -55,17 +55,13 @@ class Recipes(models.Model):
         verbose_name='Ингредиенты'
     )
     tags = models.ManyToManyField(Tag, verbose_name='Теги',
-        related_name='tags',
-        db_index=True,
-    )
-    cooking_time = models.PositiveSmallIntegerField(
-        'Время приготовления',
-        blank=False,
-        validators=[
-            MaxValueValidator(600),
-            MinValueValidator(1),
-        ],
-    )
+                                  related_name='tags', db_index=True,)
+    cooking_time = models.PositiveSmallIntegerField('Время приготовления',
+                                                    blank=False, validators=[
+                                                        MaxValueValidator(600),
+                                                        MinValueValidator(1),
+                                                    ],
+                                                   )
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now_add=True,
