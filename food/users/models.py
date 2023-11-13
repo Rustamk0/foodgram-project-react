@@ -5,7 +5,7 @@ from django.db import models
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username', 'first_name',
-        'last_name',)
+                       'last_name',)
     email = models.EmailField(
         'email',
         max_length=254,
@@ -54,15 +54,15 @@ class Follow(models.Model):
     )
 
     class Meta:
-        constraints =[
+        constraints = [
             models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='unique_subscription'
             ),
         ]
         ordering = ('id',)
-        verbose_name= 'подписка'
-        verbose_name_plural='подписки'
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
 
     def __str__(self):
         return f'{self.user} подписан на {self.author}'
