@@ -97,7 +97,7 @@ class RecipesReadSerializer(serializers.ModelSerializer):
             'cooking_time',
         ]
 
-    def get_is_favorited(self,object):
+    def get_is_favorited(self, object):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
@@ -132,7 +132,7 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all()
     )
     image = Base64ImageField()
-    cooking_time= serializers.IntegerField(
+    cooking_time = serializers.IntegerField(
         min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
