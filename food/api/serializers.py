@@ -37,9 +37,6 @@ class UserSerializer(UserSerializer):
         user.save()
         return user
 
-    def get_is_subscribed(self, following):
-        return Follow.objects.filter(user=user, following=following).exists()
-
 
 class TagSerializer(serializers.ModelSerializer):
 
