@@ -1,8 +1,6 @@
 from drf_extra_fields import Base64ImageFied
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from django.db import transaction
-from django.core.files.base import ContentFile
 from djoser.serializers import UserSerializer
 
 from users.models import Follow, User
@@ -18,7 +16,8 @@ from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 class UserSerializer(UserSerializer):
     is_subcribed=serializers.SerializerMethodField(read_only=True)
 
-    class Meta:
+  
+  class Meta:
         model = User
         fields = [
             'email',
