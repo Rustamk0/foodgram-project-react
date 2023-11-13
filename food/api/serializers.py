@@ -27,9 +27,9 @@ class UserSerializer(UserSerializer):
             'last_name',
             'password',
             'is_subcribed',
-        ]
-        read_only_fields = ['is_subscribed']
-        extra_kwargs = {'password': {'write_only': True}}
+      ]
+      read_only_fields = ['is_subscribed']
+      extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
