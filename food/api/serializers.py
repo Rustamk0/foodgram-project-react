@@ -15,22 +15,22 @@ from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
 
 class UserSerializer(UserSerializer):
-  is_subcribed=serializers.SerializerMethodField(read_only=True)
+    is_subcribed=serializers.SerializerMethodField(read_only=True)
 
   
-  class Meta:
-    model = User
-    fields = [
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'password',
-            'is_subcribed',
-    ]
-    read_only_fields = ['is_subscribed']
-    extra_kwargs = {'password': {'write_only': True}}
+    class Meta:
+      model = User
+      fields = [
+        'email',
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'password',
+        'is_subcribed',
+      ]
+      read_only_fields = ['is_subscribed']
+      extra_kwargs = {'password': {'write_only': True}}
 
   def create(self, validated_data):
     user = User.objects.create_user(**validated_data)
