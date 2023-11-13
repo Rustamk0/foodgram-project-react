@@ -195,9 +195,9 @@ class RecipeFollowSerializer(serializers.ModelSerializer):
 
 
 class FollowReadSerializer(serializers.ModelSerializer):
-    recipes = SerializerMethodField()
-    recipes_count = SerializerMethodField()
-    is_subscribed = SerializerMethodField()
+    recipes = seriazilers.SerializerMethodField()
+    recipes_count = seriazilers.SerializerMethodField()
+    is_subscribed = seriazilers.SerializerMethodField()
 
     class Meta:
         model = User
