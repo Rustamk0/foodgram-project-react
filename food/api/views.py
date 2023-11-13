@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_fremework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from recipes.models import (Favorite, Ingredient, Recipes, RecipeIngredient,
                             ShoppingCart, Tag)
