@@ -13,13 +13,14 @@ from recipes.models import (Favorite,
 
 from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
+
 class UserSerializer(UserSerializer):
-    is_subcribed=serializers.SerializerMethodField(read_only=True)
+  is_subcribed=serializers.SerializerMethodField(read_only=True)
 
   
-    class Meta:
-      model = User
-      fields = [
+  class Meta:
+    model = User
+    fields = [
             'email',
             'id',
             'username',
@@ -27,22 +28,22 @@ class UserSerializer(UserSerializer):
             'last_name',
             'password',
             'is_subcribed',
-      ]
-      read_only_fields = ['is_subscribed']
-      extra_kwargs = {'password': {'write_only': True}}
+    ]
+    read_only_fields = ['is_subscribed']
+    extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+  def create(self, validated_data):
+    user = User.objects.create_user(**validated_data)
+    user.set_password(validated_data['password'])
+    user.save()
+    return user
 
-    def get_is_subscribed(self, following):
-        request = self.context['request']
-        user = request.user
-        if user.is_anonymous:
-            return False
-        return Follow.objects.filter(user=user, following=following).exists()
+  def get_is_subscribed(self, following):
+    request = self.context['request']
+    user = request.user
+    if user.is_anonymous:
+      return False
+    return Follow.objects.filter(user=user, following=following).exists()
 
 
 class TagSerializer(serializers.ModelSerializer):
