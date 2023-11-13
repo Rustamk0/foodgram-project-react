@@ -40,4 +40,4 @@ services:
       - static_volume:/app/static
       - media_volume:/app/media 
     ports:
-      - 9000:80
+      - 8060:80
