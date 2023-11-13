@@ -4,9 +4,7 @@ from djoser.views import UserViewSet
 from django.db.models import Sum
 from django.http import HttpResponse
 
-from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenicated
 from rest_framework.response import Response
 
 from recipes.models import (Favorite, Ingredient, Recipes, RecipeIngredient,
@@ -15,10 +13,10 @@ from users.models import Follow, User
 from .filter import IngredientFilter, RecipeFilters
 from .pagination import PagePagination
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (UserSerializer,FavoriteSerializer,
-                          ShoppingCartSerializer,FollowCreateSerializer,
-                          FollowReadSerializer,IngredientSerializer,
-                          RecipesReadSerializer,RecipesCreateUpdateSerializer,
+from .serializers import (UserSerializer, FavoriteSerializer,
+                          ShoppingCartSerializer, FollowCreateSerializer,
+                          FollowReadSerializer, IngredientSerializer,
+                          RecipesReadSerializer, RecipesCreateUpdateSerializer,
                           TagSerializer)
 
 
