@@ -25,7 +25,7 @@ from .serializers import (UserSerializer, FavoriteSerializer,
 class IngredientViewSet(viewsets.ModelViewset):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    http_method_names =('get,')
+    http_method_names = ('get,')
     filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
 
