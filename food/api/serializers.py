@@ -15,7 +15,7 @@ from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
 
 class UserSerializer(UserSerializer):
-    is_subcribed=serializers.SerializerMethodField(read_only=True)
+    is_subcribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
