@@ -39,7 +39,7 @@ class UserSerializer(UserSerializer):
         return user
 
 
-class TagSerializer(ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
