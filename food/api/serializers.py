@@ -47,17 +47,17 @@ class TagSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'name', 'color', 'slug']
 
 
-class IngredientSerializer(ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
         read_only_fields = ['id', 'name', 'measurement_unit']
 
 
-class RecipeIngredientSerializer(ModelSerializer):
-    id = IntegerField(source='ingredient.id')
-    name = IntegerField(source='ingredient.name')
-    measurement_unit = IntegerField(
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='ingredient.id')
+    name = serializers.IntegerField(source='ingredient.name')
+    measurement_unit = serializers.IntegerField(
       source='ingredient.measurement_unit')
 
     class Meta:
@@ -65,7 +65,7 @@ class RecipeIngredientSerializer(ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-class RecipesReadSerializer(ModelSerializer):
+class RecipesReadSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     tags = TagSerializer(many=True)
     ingredients = RecipeIngredientSerializer(
@@ -106,8 +106,8 @@ class RecipesReadSerializer(ModelSerializer):
 
 
 class RecipesM2MSerializer(serializers.ModelSerializer):
-    id = IntegerField(source='ingredient.id')
-    amount = IntegerField(
+    id = serializers.IntegerField(source='ingredient.id')
+    amount = serializers.IntegerField(
         min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
@@ -119,15 +119,15 @@ class RecipesM2MSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount']
 
 
-class RecipesCreateUpdateSerializer(ModelSerializer):
+class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
     ingredient = RecipesM2MSerializer(many=True,
                                       source='ingredient')
-    tags = PrimaryKeyRelatedField(
+    tags = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Tag.objects.all()
     )
     image = Base64ImageField()
-    cooking_time = IntegerField(
+    cooking_time = serializers.IntegerField(
         min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
@@ -230,7 +230,7 @@ class FollowReadSerializer(serializers.ModelSerializer):
         )
 
 
-class FollowCreateSerializer(ModelSerializer):
+class FollowCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Follow
@@ -243,7 +243,7 @@ class FollowCreateSerializer(ModelSerializer):
         user = attrs.get('user')
         author = attrs.get('author')
         if user == author:
-            raise ValidationEror('Нельзя подписаться на себя')
+            raise serializers.ValidationEror('Нельзя подписаться на себя')
         if user in author.followers.all():
             raise ValidationError('Вы уже подписаны на автора')
         return super().validate(attrs)
@@ -254,7 +254,7 @@ class FollowCreateSerializer(ModelSerializer):
         return FollowReadSerializer(instance.author, context=context).data
 
 
-class ShoppingCartSerializer(ModelSerializers):
+class ShoppingCartSerializer(serializers.ModelSerializers):
     class Meta:
         model = ShoppingCart
         fields = ('user', 'recipe')
@@ -275,7 +275,7 @@ class ShoppingCartSerializer(ModelSerializers):
         return RecipeFollowSerializer(instance.recipes, context=context).data
 
 
-class FavoriteSerializer(ModelSerializer):
+class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
         fields = ('user', 'recipe')
