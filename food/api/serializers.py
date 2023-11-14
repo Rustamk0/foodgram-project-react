@@ -38,7 +38,7 @@ class UserSerializer(UserSerializer):
         return user
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(ModelSerializer):
 
     class Meta:
         model = Tag
@@ -46,17 +46,17 @@ class TagSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'name', 'color', 'slug']
 
 
-class IngredientSerializer(serializers.ModelSerializer):
+class IngredientSerializer(ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
         read_only_fields = ['id', 'name', 'measurement_unit']
 
 
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-    name = serializers.IntegerField(source='ingredient.name')
-    measurement_unit = serializers.IntegerField(
+class RecipeIngredientSerializer(ModelSerializer):
+    id = IntegerField(source='ingredient.id')
+    name = IntegerField(source='ingredient.name')
+    measurement_unit = IntegerField(
       source='ingredient.measurement_unit')
 
     class Meta:
@@ -64,7 +64,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-class RecipesReadSerializer(serializers.ModelSerializer):
+class RecipesReadSerializer(ModelSerializer):
     author = UserSerializer(read_only=True)
     tags = TagSerializer(many=True)
     ingredients = RecipeIngredientSerializer(
@@ -72,8 +72,8 @@ class RecipesReadSerializer(serializers.ModelSerializer):
         many=True,
         source='ingredient'
     )
-    is_favorited = serializers.SerializerMethodField(read_only=True)
-    is_in_shopping_cart = serializers.SerializerMethodField(read_only=True)
+    is_favorited = SerializerMethodField(read_only=True)
+    is_in_shopping_cart = SerializerMethodField(read_only=True)
     image = Base64ImageField()
 
     class Meta:
@@ -105,8 +105,8 @@ class RecipesReadSerializer(serializers.ModelSerializer):
 
 
 class RecipesM2MSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-    amount = serializers.IntegerField(
+    id = IntegerField(source='ingredient.id')
+    amount = IntegerField(
         min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
@@ -118,15 +118,15 @@ class RecipesM2MSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount']
 
 
-class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
+class RecipesCreateUpdateSerializer(ModelSerializer):
     ingredient = RecipesM2MSerializer(many=True,
                                       source='ingredient')
-    tags = serializers.PrimaryKeyRelatedField(
+    tags = PrimaryKeyRelatedField(
         many=True,
         queryset=Tag.objects.all()
     )
     image = Base64ImageField()
-    cooking_time = serializers.IntegerField(
+    cooking_time = IntegerField(
         min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
@@ -195,9 +195,9 @@ class RecipeFollowSerializer(serializers.ModelSerializer):
 
 
 class FollowReadSerializer(serializers.ModelSerializer):
-    recipes = seriazilers.SerializerMethodField()
-    recipes_count = seriazilers.SerializerMethodField()
-    is_subscribed = seriazilers.SerializerMethodField()
+    recipes = SerializerMethodField()
+    recipes_count = SerializerMethodField()
+    is_subscribed = SerializerMethodField()
 
     class Meta:
         model = User
@@ -229,7 +229,7 @@ class FollowReadSerializer(serializers.ModelSerializer):
         )
 
 
-class FollowCreateSerializer(serializers.ModelSerializer):
+class FollowCreateSerializer(ModelSerializer):
 
     class Meta:
         model = Follow
@@ -242,9 +242,9 @@ class FollowCreateSerializer(serializers.ModelSerializer):
         user = attrs.get('user')
         author = attrs.get('author')
         if user == author:
-            raise serializers.ValidationEror('Нельзя подписаться на себя')
+            raise ValidationEror('Нельзя подписаться на себя')
         if user in author.followers.all():
-            raise serializers.ValidationError('Вы уже подписаны на автора')
+            raise ValidationError('Вы уже подписаны на автора')
         return super().validate(attrs)
 
     def to_representation(self, instance):
@@ -253,7 +253,7 @@ class FollowCreateSerializer(serializers.ModelSerializer):
         return FollowReadSerializer(instance.author, context=context).data
 
 
-class ShoppingCartSerializer(serializers.ModelSerializers):
+class ShoppingCartSerializer(ModelSerializers):
     class Meta:
         model = ShoppingCart
         fields = ('user', 'recipe')
@@ -263,7 +263,7 @@ class ShoppingCartSerializer(serializers.ModelSerializers):
         recipe = attrs['recipe']
 
         if user.shopping_list_user.filter(recipe=recipe).exists():
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {'error': 'Рецепт в списке покупок'}
             )
         return super().validate(attrs)
@@ -274,7 +274,7 @@ class ShoppingCartSerializer(serializers.ModelSerializers):
         return RecipeFollowSerializer(instance.recipes, context=context).data
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(ModelSerializer):
     class Meta:
         model = Favorite
         fields = ('user', 'recipe')
@@ -283,7 +283,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         user = attrs['user']
         recipe = attrs['recipe']
         if user.favorites.filter(recipe=recipe).exists():
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {'error': 'Рецепт в избраном'})
         return super().validate(attrs)
 
