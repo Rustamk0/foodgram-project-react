@@ -67,12 +67,25 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd foodgram
-            sudo docker compose -f docker-compose.yml pull
-            sudo docker compose -f docker-compose.yml down
-            sudo docker compose -f docker-compose.yml up -d
-            sudo docker compose -f docker-compose.yml exec backend python manage.py migrate
-            sudo docker compose -f docker-compose.yml exec backend python manage.py collectstatic
-            sudo docker compose -f docker-compose.yml exec backend cp -r /app/static/. /backend_static/static/
+            sudo docker compose down
+            sudo docker image prune --force
+            sudo docker container prune --force
+            sudo docker system prune --force
+
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend_foodgram:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend_foodgram:latest
+
+            sudo docker compose stop
+            sudo docker compose rm backend
+            sudo docker compose up -d
+
+            sudo docker compose exec -T backend python manage.py makemigrations users
+            sudo docker compose exec -T backend python manage.py makemigrations recipes
+            sudo docker compose exec -T backend python manage.py migrate
+            sudo docker compose exec -T backend python manage.py collectstatic --no-input
+            sudo docker compose exec -T backend python manage.py load_to_db
+            sudo docker compose exec -T backend python manage.py load_tags
+
             
   send_message_telegram:
     name: Send message to Telegram
