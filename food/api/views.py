@@ -77,7 +77,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
             detail=True,
             permission_classes=(IsAuthenticated,)
     )
-
     def favorite(self, request, pk=None):
         return self.shopping_or_favorite(Favorite,
                                          FavoriteSerializer, pk=pk)
@@ -87,7 +86,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
             detail=False,
             permission_classes=(IsAuthenticated,)
     )
-
     def shopping_card(self, request, pk=None):
         return self.shopping_or_favorite(ShoppingCart,
                                          ShoppingCartSerializer, pk=pk)
@@ -97,10 +95,10 @@ class RecipesViewSet(viewsets.ModelViewSet):
             detail=False,
             permission_classes=(IsAuthenticated,)
     )
-
     def download_shopping_cart(self, request):
         ingredient_list = RecipeIngredient.objects.filter(
-            recipe__shopping_lists_recipe__user=request.user).order_by('ingredient__name')
+            recipe__shopping_lists_recipe__user=request.user).order_by(
+                'ingredient__name')
         ingredient_totals = ingredient_list.values(
             'ingredient__name', 'ingredient__measurement_unit').annotate(
                 total_amount=Sum('amount'))
@@ -118,7 +116,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return response
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class SubUserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     pagination_class = PagePagination
