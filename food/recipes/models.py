@@ -12,9 +12,8 @@ User = get_user_model()
 hex_color_validator = RegexValidator(
     regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
     message='Введите корректный hex-код цвета',
-    code='invalid_hex_color'
+    code='invalid_hex_color',
 )
-
 
 class Ingredient(models.Model):
     name = models.CharField(verbose_name='Ингредиент',

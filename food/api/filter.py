@@ -4,6 +4,7 @@ from rest_framework.filters import SearchFilter
 from recipes.models import Ingredient, Recipes
 from users.models import User
 
+
 class IngredientFilter(SearchFilter):
     name = filters.CharFilter(field_name='name', lookup_expr='istartswith')
 
@@ -39,7 +40,6 @@ class RecipeFilters(FilterSet):
 
 
 class AuthorFilter(FilterSet):
-    
     username = filters.CharFilter(lookup_expr='startswith')
     email = filters.CharFilter(lookup_expr='startswith')
 
