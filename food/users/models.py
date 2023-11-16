@@ -1,6 +1,16 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 
+from users.constants import (MAX_EMAIL, MAX_USER, MAX_NAME, MAX_LAST_NAME)
+
+username_validator = RegexValidator(
+    regex=r"^[\w.@+-]+$",
+    message=(
+        "Имя пользователя должно состоять из буквенно-цифровых символов, "
+        'а также знаков ".", "@", "+", "-" и не содержать других символов.'
+    ),
+)
 
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
@@ -8,24 +18,25 @@ class User(AbstractUser):
                        'last_name',)
     email = models.EmailField(
         'email',
-        max_length=254,
+        max_length=MAX_EMAIL,
         unique=True,
-        blank=False,
         null=False
     )
     username = models.CharField(
-        max_length=100,
+        max_length=MAX_USER,
         unique=True,
         blank=False,
-        null=False
+        null=False,
+
     )
     first_name = models.CharField(
-        max_length=150,
+        max_length=MAX_NAME,
         blank=False,
-        null=False
+        null=False,
+        validators=[username_validator],
     )
     last_name = models.CharField(
-        max_length=150,
+        max_length=MAX_LAST_NAME,
         blank=False,
         null=False
     )
@@ -55,7 +66,7 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
+            models.CheckConstraint(
                 fields=['user', 'author'],
                 name='unique_subscription'
             ),

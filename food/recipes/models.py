@@ -4,34 +4,42 @@ from django.core.validators import (
     MinValueValidator,
     MaxValueValidator
 )
+from django.core.validators import RegexValidator
 
 
 User = get_user_model()
 
+hex_color_validator = RegexValidator(
+    regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
+    message='Введите корректный hex-код цвета',
+    code='invalid_hex_color'
+)
 
 class Ingredient(models.Model):
-    name = models.CharField('Ингредиент', max_length=100, blank=False,)
-    measurement_unit = models.CharField('Единица измерения',
-                                        max_length=30,
-                                        blank=False,)
+    name = models.CharField(verbose_name='Ингредиент',
+                            max_length=100, unique=True,)
+    measurement_unit = models.CharField(verbose_name='Единица измерения',
+                                        max_length=30,)
 
     class Meta:
         ordering = ('name',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        unique_together = ('name', 'measuremet_unit')
 
     def __str__(self):
         return self.name
 
 
 class Tag(models.Model):
-    name = models.CharField('Название тега', max_length=200, unique=True)
-    color = models.CharField('Цвет тега', max_length=7, unique=True)
-    slug = models.SlugField('Слаг', max_length=200, unique=True)
+    name = models.CharField(verbose_name='Название тега', max_length=200, unique=True)
+    color = models.CharField(verbose_name='Цвет тега', max_length=7, validators=[hex_color_validator], unique=True)
+    slug = models.SlugField(verbose_name='Слаг', max_length=200, unique=True)
 
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+        unique_together = ('name', 'color', 'slug')
 
     def __str__(self):
         return self.name
@@ -51,7 +59,7 @@ class Recipes(models.Model):
                             blank=False)
     ingredients = models.ManyToManyField(
         Ingredient,
-        related_name='rerecipes',
+        related_name='recipes',
         through='RecipeIngredient',
         verbose_name='Ингредиенты'
     )
@@ -76,11 +84,9 @@ class Recipes(models.Model):
 
 class RecipeIngredient(models.Model):
     ingredients = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name='ingredients'
-    )
+        Ingredient, on_delete=models.CASCADE,)
     recipe = models.ForeignKey(
-        Recipes, on_delete=models.CASCADE, related_name='recipes'
-    )
+        Recipes, on_delete=models.CASCADE,)
     amount = models.PositiveIntegerField('Количество ингредиента')
 
     class Meta:
@@ -100,11 +106,9 @@ class RecipeIngredient(models.Model):
 
 class Favorite(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user_favorite'
-    )
+        User, on_delete=models.CASCADE,)
     recipe = models.ForeignKey(
-        Recipes, on_delete=models.CASCADE, related_name='recipe_favorite'
-    )
+        Recipes, on_delete=models.CASCADE,)
 
     class Meta:
         default_related_name = 'favorites'

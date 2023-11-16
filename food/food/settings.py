@@ -59,6 +59,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'food.wsgi.application'
 
+AUTH_USER_MODEL = 'users.User'
+
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'api.serializers.UserSerializer',
@@ -70,6 +72,7 @@ DJOSER = {
         'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     },
     'HIDE_USERS': False,
+    'LOGIN_FIELD': 'email',
 }
 
 

@@ -15,7 +15,7 @@ from recipes.models import (Favorite,
 from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
 
-class UserSerializer(UserSerializer):
+class UserSerializer(serializers.ModelField):
     is_subcribed = SerializerMethodField(read_only=True)
 
     class Meta:
@@ -26,17 +26,19 @@ class UserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-            'password',
             'is_subcribed',
         ]
         read_only_fields = ['is_subscribed']
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+    def get_is_subscribed(self, objects):
+        if (self.context.get('request')
+            and not self.context['request'].user.is_anonymous):
+            return Follow.objects.filter(
+                user=self.context['request'].user,
+                author=objects).exists()
+        return False
+
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -102,7 +104,7 @@ class RecipesReadSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return object.cart.filter(user=user).exists
+        return object.cart.filter(user=user).exists()
 
 
 class RecipesM2MSerializer(serializers.ModelSerializer):
@@ -217,10 +219,11 @@ class FollowReadSerializer(serializers.ModelSerializer):
         return objects.recipes.count()
 
     def get_recipes(self, objects):
-        recipes_limit = self.context['request'].GET.get('recipes_limit')
-        recipes = objects.recipes.all()[:int(
-            recipes_limit)] if recipes_limit else objects.recipes.all()
-        return RecipeFollowSerializer(recipes, many=True, read_only=True).data
+        recipes_limit = self.context.get("recipes_limit")
+        recipe = Recipes.objects.filter(author=objects.id)
+        if recipes_limit:
+            recipe = recipe[: int(recipes_limit)]
+        return RecipeFollowSerializer(recipe, many=True).data
 
     def get_is_subscribed(self, objects):
         user = self.context['request'].user
