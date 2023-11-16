@@ -72,27 +72,27 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
-            methods=['post', 'delete'],
-            detail=True,
-            permission_classes=(IsAuthenticated,)
+        methods=['post', 'delete'],
+        detail=True,
+        permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk=None):
         return self.shopping_or_favorite(Favorite,
                                          FavoriteSerializer, pk=pk)
 
     @action(
-            methods=['get'],
-            detail=False,
-            permission_classes=(IsAuthenticated,)
+        methods=['get'],
+        detail=False,
+        permission_classes=(IsAuthenticated,)
     )
     def shopping_card(self, request, pk=None):
         return self.shopping_or_favorite(ShoppingCart,
                                          ShoppingCartSerializer, pk=pk)
 
     @action(
-            methods=['get'],
-            detail=False,
-            permission_classes=(IsAuthenticated,)
+        methods=['get'],
+        detail=False,
+        permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
         ingredient_list = RecipeIngredient.objects.filter(
