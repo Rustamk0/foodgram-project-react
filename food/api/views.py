@@ -78,10 +78,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthenticated,)
     )
 
-
     def favorite(self, request, pk=None):
-        return self.shopping_or_favorite(Favorite, FavoriteSerializer, pk=pk)
-
+            return self.shopping_or_favorite(Favorite, FavoriteSerializer, pk=pk)
 
     @action(
             methods=['get'],
@@ -103,8 +101,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     def download_shopping_cart(self, request):
         ingredient_list = RecipeIngredient.objects.filter(
-            recipe__shopping_lists_recipe__user=request.user
-        ).order_by('ingredient__name')
+            recipe__shopping_lists_recipe__user=request.user).order_by('ingredient__name')
         ingredient_totals = ingredient_list.values(
             'ingredient__name', 'ingredient__measurement_unit').annotate(
                 total_amount=Sum('amount'))
