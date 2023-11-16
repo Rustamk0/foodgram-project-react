@@ -47,7 +47,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
             return RecipesCreateUpdateSerializer
         return RecipesReadSerializer
 
-    
     def shopping_or_favorite(self, current_model, current_serializer, request,
                              pk=None):
         user = request.user.id

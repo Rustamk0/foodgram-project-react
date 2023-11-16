@@ -40,7 +40,6 @@ class UserSerializer(serializers.ModelField):
         return False
 
 
-
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:

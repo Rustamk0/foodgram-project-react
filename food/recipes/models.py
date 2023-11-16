@@ -15,6 +15,7 @@ hex_color_validator = RegexValidator(
     code='invalid_hex_color'
 )
 
+
 class Ingredient(models.Model):
     name = models.CharField(verbose_name='Ингредиент',
                             max_length=100, unique=True,)
@@ -32,8 +33,10 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(verbose_name='Название тега', max_length=200, unique=True)
-    color = models.CharField(verbose_name='Цвет тега', max_length=7, validators=[hex_color_validator], unique=True)
+    name = models.CharField(verbose_name='Название тега',
+                            max_length=200, unique=True)
+    color = models.CharField(verbose_name='Цвет тега', max_length=7,
+                             validators=[hex_color_validator], unique=True)
     slug = models.SlugField(verbose_name='Слаг', max_length=200, unique=True)
 
     class Meta:
