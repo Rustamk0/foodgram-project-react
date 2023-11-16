@@ -79,14 +79,14 @@ class RecipesViewSet(viewsets.ModelViewSet):
     )
 
     def favorite(self, request, pk=None):
-            return self.shopping_or_favorite(Favorite, FavoriteSerializer, pk=pk)
+        return self.shopping_or_favorite(Favorite,
+                                         FavoriteSerializer, pk=pk)
 
     @action(
             methods=['get'],
             detail=False,
             permission_classes=(IsAuthenticated,)
     )
-
 
     def shopping_card(self, request, pk=None):
         return self.shopping_or_favorite(ShoppingCart,
@@ -97,7 +97,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
             detail=False,
             permission_classes=(IsAuthenticated,)
     )
-
 
     def download_shopping_cart(self, request):
         ingredient_list = RecipeIngredient.objects.filter(

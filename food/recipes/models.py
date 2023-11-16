@@ -15,6 +15,7 @@ hex_color_validator = RegexValidator(
     code='invalid_hex_color',
 )
 
+
 class Ingredient(models.Model):
     name = models.CharField(verbose_name='Ингредиент',
                             max_length=100, unique=True,)

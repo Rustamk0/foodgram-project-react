@@ -32,12 +32,13 @@ class CustomUserSerializer(serializers.ModelField):
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_is_subscribed(self, objects):
-        if (self.context.get('request') and
-            not self.context['request'].user.is_anonymous):
-            return Follow.objects.filter(
-                user=self.context['request'].user,
-                author=objects).exists()
-        return False
+        request = self.context.get("request")
+        return (
+            request.user.is_authenticated
+            and Follow.objects.filter(
+                user=request.user.id, following=objects.id
+            ).exists()
+        )
 
 
 class TagSerializer(serializers.ModelSerializer):
