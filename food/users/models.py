@@ -1,16 +1,9 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
 from django.db import models
 
 from users.constants import (MAX_EMAIL, MAX_USER, MAX_NAME, MAX_LAST_NAME)
+from recipes.validators import validator
 
-username_validator = RegexValidator(
-    regex=r"^[\w.@+-]+$",
-    message=(
-        "Имя пользователя должно состоять из буквенно-цифровых символов, "
-        'а также знаков ".", "@", "+", "-" и не содержать других символов.'
-    ),
-)
 
 
 class User(AbstractUser):
@@ -21,20 +14,19 @@ class User(AbstractUser):
         'email',
         max_length=MAX_EMAIL,
         unique=True,
-        null=False
     )
     username = models.CharField(
         max_length=MAX_USER,
         unique=True,
         blank=False,
-        null=False,
+        validators=[validator],
 
     )
     first_name = models.CharField(
         max_length=MAX_NAME,
         blank=False,
         null=False,
-        validators=[username_validator],
+        validators=[validator],
     )
     last_name = models.CharField(
         max_length=MAX_LAST_NAME,

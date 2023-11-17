@@ -4,29 +4,22 @@ from django.core.validators import (
     MinValueValidator,
     MaxValueValidator
 )
-from django.core.validators import RegexValidator
-
+from recipes.validators import hex_color_validator
+from users.constants import (MAX_USER, MAX_RECIPES, MAX_UNIT, NAME_TEG, COLOR_TEG, SLUG)
 
 User = get_user_model()
-
-hex_color_validator = RegexValidator(
-    regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-    message='Введите корректный hex-код цвета',
-    code='invalid_hex_color',
-)
 
 
 class Ingredient(models.Model):
     name = models.CharField(verbose_name='Ингредиент',
-                            max_length=100, unique=True,)
+                            max_length=MAX_USER, unique=True,)
     measurement_unit = models.CharField(verbose_name='Единица измерения',
-                                        max_length=30,)
+                                        max_length=MAX_UNIT,)
 
     class Meta:
         ordering = ('name',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-        unique_together = ('name', 'measuremet_unit')
 
     def __str__(self):
         return self.name
@@ -34,10 +27,10 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(verbose_name='Название тега',
-                            max_length=200, unique=True)
-    color = models.CharField(verbose_name='Цвет тега', max_length=7,
+                            max_length=NAME_TEG, unique=True)
+    color = models.CharField(verbose_name='Цвет тега', max_length=COLOR_TEG,
                              validators=[hex_color_validator], unique=True)
-    slug = models.SlugField(verbose_name='Слаг', max_length=200, unique=True)
+    slug = models.SlugField(verbose_name='Слаг', max_length=SLUG, unique=True)
 
     class Meta:
         verbose_name = 'Тег'
@@ -55,17 +48,11 @@ class Recipes(models.Model):
         related_name='recipes',
         verbose_name='Автор',
     )
-    name = models.CharField('Рецепт', max_length=200, blank=False,)
+    name = models.CharField('Рецепт', max_length=MAX_RECIPES, blank=False,)
     image = models.ImageField('Картинка', upload_to='recipe_images/',
                               blank=False)
     text = models.TextField(verbose_name='Описание',
                             blank=False)
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        related_name='recipes',
-        through='RecipeIngredient',
-        verbose_name='Ингредиенты'
-    )
     tags = models.ManyToManyField(Tag, verbose_name='Теги',
                                   related_name='tags', db_index=True,)
     cooking_time = models.PositiveSmallIntegerField('Время приготовления',

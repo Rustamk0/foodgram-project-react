@@ -15,7 +15,7 @@ from recipes.models import (Favorite,
 from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
 
-class CustomUserSerializer(serializers.ModelField):
+class InfoUserSerializer(serializers.ModelField):
     is_subcribed = SerializerMethodField(read_only=True)
 
     class Meta:
@@ -28,14 +28,13 @@ class CustomUserSerializer(serializers.ModelField):
             'last_name',
             'is_subcribed',
         ]
-        read_only_fields = ['is_subscribed']
-        extra_kwargs = {'password': {'write_only': True}}
+
 
     def get_is_subscribed(self, objects):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and Follow.objects.filter(
+            and User.objects.filter(
                 user=request.user.id, following=objects.id
             ).exists()
         )
@@ -221,9 +220,8 @@ class FollowReadSerializer(serializers.ModelSerializer):
     def get_recipes(self, objects):
         recipes_limit = self.context.get("recipes_limit")
         recipe = Recipes.objects.filter(author=objects.id)
-        if recipes_limit:
-            recipe = recipe[: int(recipes_limit)]
-        return RecipeFollowSerializer(recipe, many=True).data
+        if recipes_limit is not None and recipes_limit.isdigit():
+            return RecipeFollowSerializer(recipe, many=True).data
 
     def get_is_subscribed(self, objects):
         user = self.context['request'].user
