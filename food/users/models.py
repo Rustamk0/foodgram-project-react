@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from users.constants import (MAX_EMAIL, MAX_USER, MAX_NAME, MAX_LAST_NAME)
-from recipes.validators import validator
+from recipes.validators import validator, validate_username
 
 
 class User(AbstractUser):
@@ -18,8 +18,7 @@ class User(AbstractUser):
         max_length=MAX_USER,
         unique=True,
         blank=False,
-        validators=[validator],
-
+        validators=([validator], validate_username,)
     )
     first_name = models.CharField(
         max_length=MAX_NAME,
@@ -58,12 +57,16 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [
-            models.CheckConstraint(
+            models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='unique_subscription'
             ),
+
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_prevent_self_follow",
+                check=~models.Q(follower=models.F("author")),)
         ]
-        ordering = ('id',)
+        ordering = ('author',)
         verbose_name = 'подписка'
         verbose_name_plural = 'подписки'
 

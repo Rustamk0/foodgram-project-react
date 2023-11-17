@@ -1,5 +1,5 @@
 from django.core.validators import RegexValidator
-
+from django.core.exceptions import ValidationError
 
 hex_color_validator = RegexValidator(
     regex='^#([A-Fa-f0-9]{3,6})$',
@@ -15,3 +15,10 @@ validator = RegexValidator(
         'а также знаков ".", "@", "+", "-" и не содержать других символов.'
     ),
 )
+
+def validate_username(value):
+    if value.lower() == 'me':
+        raise ValidationError(
+            ('Имя пользователя не может быть <me>.'),
+            params={'value': value},
+        )

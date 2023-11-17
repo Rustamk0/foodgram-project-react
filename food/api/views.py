@@ -115,7 +115,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return response
 
 
-class SubUserViewSet(viewsets.ModelViewSet):
+class SubUserViewSet(UserViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     pagination_class = PagePagination
