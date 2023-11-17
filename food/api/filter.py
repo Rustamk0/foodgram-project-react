@@ -6,14 +6,10 @@ from users.models import User
 
 
 class IngredientFilter(SearchFilter):
-    name = filters.CharFilter(field_name='name', lookup_expr='istartswith')
-
-    class Meta:
-        model = Ingredient
-        fields = ('name',)
+    search_param = 'name'
 
 
-class RecipeFilters(FilterSet):
+class RecipeFilter(FilterSet):
     tags = filters.AllValuesMultipleFilter(
         field_name='tags__slug'
     )
