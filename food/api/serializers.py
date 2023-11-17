@@ -29,7 +29,6 @@ class InfoUserSerializer(serializers.ModelField):
             'is_subcribed',
         ]
 
-
     def get_is_subscribed(self, objects):
         request = self.context.get("request")
         return (

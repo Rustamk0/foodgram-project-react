@@ -5,7 +5,6 @@ from users.constants import (MAX_EMAIL, MAX_USER, MAX_NAME, MAX_LAST_NAME)
 from recipes.validators import validator
 
 
-
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username', 'first_name',

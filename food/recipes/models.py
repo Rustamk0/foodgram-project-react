@@ -5,7 +5,12 @@ from django.core.validators import (
     MaxValueValidator
 )
 from recipes.validators import hex_color_validator
-from users.constants import (MAX_USER, MAX_RECIPES, MAX_UNIT, NAME_TEG, COLOR_TEG, SLUG)
+from users.constants import (MAX_USER,
+                             MAX_RECIPES,
+                             MAX_UNIT,
+                             NAME_TEG,
+                             COLOR_TEG,
+                             SLUG)
 
 User = get_user_model()
 
