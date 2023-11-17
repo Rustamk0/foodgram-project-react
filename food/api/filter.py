@@ -10,6 +10,7 @@ class IngredientFilter(SearchFilter):
 
 
 class RecipeFilter(FilterSet):
+    author = filter.NumberFilter(field_name="author__id")
     tags = filters.AllValuesMultipleFilter(
         field_name='tags__slug'
     )
@@ -33,15 +34,3 @@ class RecipeFilter(FilterSet):
             if value and self.request.user.is_authenticated:
                 return queryset.filter(shopping_cart__user=self.request.user)
             return queryset
-
-
-class AuthorFilter(FilterSet):
-    username = filters.CharFilter(lookup_expr='startswith')
-    email = filters.CharFilter(lookup_expr='startswith')
-
-    class Meta:
-        model = User
-        fields = {
-            'username',
-            'email',
-        }
