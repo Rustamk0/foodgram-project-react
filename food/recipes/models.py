@@ -114,7 +114,6 @@ class Favorite(models.Model):
         verbose_name="Рецепт",
         related_name="recipe_favorite")
 
-
     class Meta:
         ordering = ("user",)
         verbose_name = "Избранное"
