@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
 from rest_framework.exceptions import ValidationError
 from djoser.serializers import UserSerializer
+from django.conf import settings
 
 from users.models import Follow, User
 from recipes.models import (Favorite,
@@ -11,8 +12,6 @@ from recipes.models import (Favorite,
                             RecipeIngredient,
                             ShoppingCart,
                             Tag,)
-
-from food.settings import MIN_VAL_NUM, MAX_VAL_NUM
 
 
 class InfoUserSerializer(serializers.ModelField):
@@ -108,7 +107,8 @@ class RecipesReadSerializer(serializers.ModelSerializer):
 class RecipesM2MSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='ingredient.id')
     amount = serializers.IntegerField(
-        min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
+        min_value=settings.MIN_VAL_NUM, max_value=settings.MAX_VAL_NUM,
+        error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
         }
@@ -128,7 +128,8 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
     )
     image = Base64ImageField()
     cooking_time = serializers.IntegerField(
-        min_value=MIN_VAL_NUM, max_value=MAX_VAL_NUM, error_message={
+        min_value=settings.MIN_VAL_NUM, max_value=settings.MAX_VAL_NUM, 
+        error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'
         }
