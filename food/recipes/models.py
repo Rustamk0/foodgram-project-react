@@ -11,8 +11,8 @@ from users.constants import (MAX_USER,
                              NAME_TEG,
                              COLOR_TEG,
                              SLUG,
-                             MAX_VALUE,
-                             MIN_VALUE,)
+                             MAX,
+                             MIN,)
 
 User = get_user_model()
 
@@ -67,8 +67,8 @@ class Recipes(models.Model):
     cooking_time = models.PositiveSmallIntegerField('Время приготовления',
                                                     blank=False,
                                                     validators=[
-                                                        MaxValueValidator(MAX_VALUE),
-                                                        MinValueValidator(MIN_VALUE),
+                                                        MaxValueValidator(MAX),
+                                                        MinValueValidator(MIN),
                                                     ],)
     pub_date = models.DateTimeField(
         'Дата публикации',
