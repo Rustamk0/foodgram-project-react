@@ -32,8 +32,8 @@ class InfoUserSerializer(serializers.ModelField):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and User.objects.filter(
-                user=request.user.id, following=objects.id
+            and Follow.objects.filter(
+                user=request.user.id, author=objects.id
             ).exists()
         )
 
