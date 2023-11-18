@@ -106,34 +106,45 @@ class RecipeIngredient(models.Model):
 
 class Favorite(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE,)
+        User, on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="user_favorite")
     recipe = models.ForeignKey(
-        Recipes, on_delete=models.CASCADE,)
+        Recipes, on_delete=models.CASCADE,
+        verbose_name="Рецепт",
+        related_name="recipe_favorite")
+
 
     class Meta:
-        default_related_name = 'favorites'
-        verbose_name = 'Избранное'
-        verbose_name_plural = 'Избранное'
-        contraints = (models.UniqueConstraint(
-            fields=('user', 'recipe'), name='unique_favorite'),
-        )
-
-    def __str__(self):
-        return f'{self.user} {self.recipe}'
+        ordering = ("user",)
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранное"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"], name="unique_name_favorite_recipe"
+            )
+        ]
 
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE
+        User, on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="shopping_list"
     )
     recipe = models.ForeignKey(
-        Recipes, on_delete=models.CASCADE
+        Recipes, on_delete=models.CASCADE,
+        verbose_name="Рецепт",
+        related_name="shopping_list",
     )
 
     class Meta:
-        default_related_name = 'carts'
-        verbose_name = 'Список покупок'
-        verbose_name_plural = 'Список покупок'
-
-    def __str__(self):
-        return f'{self.user} / {self.recipe}'
+        ordering = ("user",)
+        verbose_name = "Корзина"
+        verbose_name_plural = "Список покупок"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"],
+                name="unique_name_shopping_list_recipe"
+            )
+        ]
