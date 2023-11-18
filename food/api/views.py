@@ -2,12 +2,13 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
 from django.http import HttpResponse
-from djoser.views import UserViewSet
 
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_fremework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
 
 from recipes.models import (Favorite, Ingredient, Recipes, RecipeIngredient,
                             ShoppingCart, Tag)
@@ -116,7 +117,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return response
 
 
-class SubUserViewSet(UserViewSet):
+class SubUserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     pagination_class = PagePagination
