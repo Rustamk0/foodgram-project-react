@@ -128,7 +128,7 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
     )
     image = Base64ImageField()
     cooking_time = serializers.IntegerField(
-        min_value=settings.MIN_VAL_NUM, max_value=settings.MAX_VAL_NUM, 
+        min_value=settings.MIN_VAL_NUM, max_value=settings.MAX_VAL_NUM,
         error_message={
             'min_value': 'Мин. значение не менее 1.',
             'max_value': 'Макс. значение не менее 32000.'

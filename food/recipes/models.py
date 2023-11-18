@@ -57,14 +57,16 @@ class Recipes(models.Model):
         verbose_name='Автор',
     )
     name = models.CharField('Рецепт', max_length=MAX_RECIPES, blank=False,)
-    image = models.ImageField('Картинка', upload_to='recipe_images/',
+    image = models.ImageField('Картинка',
+                              upload_to='recipe_images/',
                               blank=False)
     text = models.TextField(verbose_name='Описание',
                             blank=False)
     tags = models.ManyToManyField(Tag, verbose_name='Теги',
                                   related_name='tags', db_index=True,)
     cooking_time = models.PositiveSmallIntegerField('Время приготовления',
-                                                    blank=False, validators=[
+                                                    blank=False,
+                                                    validators=[
                                                         MaxValueValidator(MAX_VALUE),
                                                         MinValueValidator(MIN_VALUE),
                                                     ],)

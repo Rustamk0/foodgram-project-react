@@ -17,4 +17,3 @@ ingrent_validator = RegexValidator(
         'не содержать симолов "&", "%", "$", "#",":", ";","!"'
     ),
 )
-
