@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from users.constants import (MAX_EMAIL, MAX_USER, MAX_NAME, MAX_LAST_NAME)
-from recipes.validators import validator, validate_username
+from recipes.validators import uni_validator
 
 
 class User(AbstractUser):
@@ -17,13 +17,13 @@ class User(AbstractUser):
     username = models.CharField(
         max_length=MAX_USER,
         unique=True,
-        validators=([validator],)
+        validators=([uni_validator],)
     )
     first_name = models.CharField(
         max_length=MAX_NAME,
         blank=False,
         null=False,
-        validators=[validator],
+        validators=[uni_validator],
     )
     last_name = models.CharField(
         max_length=MAX_LAST_NAME,

@@ -1,5 +1,7 @@
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
+from django.contrib.auth.validators import UnicodeUsernameValidator
+
+uni_validator = UnicodeUsernameValidator()
 
 hex_color_validator = RegexValidator(
     regex='^#([A-Fa-f0-9]{3,6})$',
@@ -8,10 +10,11 @@ hex_color_validator = RegexValidator(
 )
 
 
-validator = RegexValidator(
-    regex=r"^[a-zA-Z0-9]{4,16}$",
+ingrent_validator = RegexValidator(
+    regex=r"^[$%^&#:;!]",
     message=(
         "Имя пользователя должно состоять из буквенно-цифровых символов, "
-        'а также знаков ".", "@", "+", "-" и не содержать других символов.'
+        'не содержать симолов "&", "%", "$", "#",":", ";","!"'
     ),
 )
+

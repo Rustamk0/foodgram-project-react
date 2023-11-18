@@ -7,12 +7,16 @@ from recipes.models import Ingredient
 
 class Command(BaseCommand):
 
-    def handle(self, *args, **kwargs):
-        with open("data/ingredients.csv", encoding="utf8") as f:
-            reader_object = csv.reader(f, delimiter=",")
-            for row in reader_object:
-                obj = Ingredient(
-                    name=row[0],
-                    measurement_unit=row[1],
+    def handle(self):
+        with open("data/ingredients.csv", encoding='utf8') as f:
+            csv_reader = csv.reader(f)
+            data = []
+            next(csv_reader)
+            for row in csv_reader:
+                name, measurement_unit = row
+                ingredient = Ingredient(
+                    name=name,
+                    measurement_unit=measurement_unit,
                 )
-                obj.save()
+                data.append(ingredient)
+            Ingredient.objects.bulk_create(data)

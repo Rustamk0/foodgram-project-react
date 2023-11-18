@@ -4,7 +4,7 @@ from django.core.validators import (
     MinValueValidator,
     MaxValueValidator
 )
-from recipes.validators import hex_color_validator
+from recipes.validators import hex_color_validator, ingrent_validator
 from users.constants import (MAX_USER,
                              MAX_RECIPES,
                              MAX_UNIT,
@@ -19,6 +19,7 @@ User = get_user_model()
 
 class Ingredient(models.Model):
     name = models.CharField(verbose_name='Ингредиент',
+                            validators=[ingrent_validator],
                             max_length=MAX_USER, unique=True,)
     measurement_unit = models.CharField(verbose_name='Единица измерения',
                                         max_length=MAX_UNIT,)
