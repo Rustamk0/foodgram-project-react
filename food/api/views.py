@@ -16,7 +16,7 @@ from users.models import Follow, User
 from .filter import IngredientFilter, RecipeFilters
 from .pagination import PagePagination
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (UserSerializer, FavoriteSerializer,
+from .serializers import (InfoUserSerializer, FavoriteSerializer,
                           ShoppingCartSerializer, FollowCreateSerializer,
                           FollowReadSerializer, IngredientSerializer,
                           RecipesReadSerializer, RecipesCreateUpdateSerializer,
@@ -118,7 +118,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
 
 class SubUserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
-    serializer_class = UserSerializer
+    serializer_class = InfoUserSerializer
     queryset = User.objects.all()
     pagination_class = PagePagination
 

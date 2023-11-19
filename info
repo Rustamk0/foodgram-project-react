@@ -1,4 +1,26 @@
+Подготовьте свой удалённый сервер к публикации проекта Kittygram:
+Очистите диск сервера от лишних данных:
+удалите кеш npm: 
+npm cache clean --force;
+удалите кеш APT: 
+sudo apt-get clean;
+удалите старые системные логи: 
+sudo journalctl --vacuum-time=1d
+Полезно будет выполнить команду 
+sudo docker system prune -af: она уберёт
 
+sudo rm -rf
+
+
+
+POSTGRES_DB=foodgram
+POSTGRES_USER=foodgram_user
+POSTGRES_PASSWORD=alana4bum
+DB_PORT=db
+DB_HOST=5432
+SECRET_KEY=django-insecure-z)&kh1ooe7v8vbhem6%atmkxwyd_i0fyd2ot*9p8f#1v%0$aa-
+DEBUG=False
+ALLOWED_HOSTS=51.250.108.9,localhost,127.0.0.1,sweetyfoody.ddns.net
 
 server {
     server_name 51.250.108.9 sweetyfoody.ddns.net;
